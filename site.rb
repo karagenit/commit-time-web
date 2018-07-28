@@ -20,12 +20,12 @@ get '/user' do
   redirect "/user/#{params[:login]}" unless params[:login].nil?
 
   # TODO: redirect to /user/login based on who owns this OAuth token
-  erb :user
+  erb :search
 end
 
 get '/user/:login' do
   authenticate!
-  get_repo_list(session[:token], params[:login]).to_s
+  erb :user, locals: { repos: get_all_repos(session[:token], params[:login]) }
 end
 
 def authenticate!
