@@ -7,8 +7,21 @@ require 'json'
 CLIENT_ID = File.read('client-id.token')
 CLIENT_SECRET = File.read('client-secret.token')
 
+enable :sessions
+
 get '/' do
   erb :index
+end
+
+get '/user' do
+  "Token: #{session[:token]}"
+end
+
+get '/user/:login' do
+
+end
+
+def check_auth
 end
 
 get '/auth/create' do
@@ -17,17 +30,14 @@ get '/auth/create' do
 end
 
 get '/auth/callback' do
-  github_code = params[:code]
-
-  puts "Code: #{github_code}"
-
   result = RestClient.post('https://github.com/login/oauth/access_token',
                           {client_id: CLIENT_ID,
                            client_secret: CLIENT_SECRET,
-                           code: github_code},
+                           code: params[:code]},
                            accept: :json)
 
-  token = JSON.parse(result)['access_token']
+  result = JSON.parse(result)
+  session[:token] = result["access_token"]
 
-  puts "Token: #{token}"
+  redirect '/user'
 end
