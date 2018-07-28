@@ -2,7 +2,7 @@
     <% repos.each do |repo| %>
         <tr>
             <td><%= repo[:name] %></td>
-            <td><%= repo[:times].total_time %></td>
+            <td><%= time_fmt repo[:times].total_time %></td>
         </tr>
     <% end %>
 </table>
