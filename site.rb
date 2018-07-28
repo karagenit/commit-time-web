@@ -14,7 +14,7 @@ get '/' do
 end
 
 get '/user' do
-  check_auth
+  authenticate!
   redirect "/user/#{params[:login]}" unless params[:login].nil?
 
   # TODO: redirect to /user/login based on who owns this OAuth token
@@ -22,10 +22,11 @@ get '/user' do
 end
 
 get '/user/:login' do
+  authenticate!
   params.to_s
 end
 
-def check_auth
+def authenticate!
   redirect '/auth/create' if session[:token].nil?
 end
 
