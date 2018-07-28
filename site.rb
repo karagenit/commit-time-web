@@ -14,14 +14,17 @@ get '/' do
 end
 
 get '/user' do
-  "Token: #{session[:token]}"
+  check_auth
+  # TODO: redirect to /user/login based on who owns this OAuth token
+  erb :user
 end
 
 get '/user/:login' do
-
+  params.to_s
 end
 
 def check_auth
+  redirect '/auth/create' if session[:token].nil?
 end
 
 get '/auth/create' do
