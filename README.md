@@ -1,10 +1,14 @@
 # commit-time-web
 Web Dashboard for commit-time
 
-Second version will be a web app using github's v4 API to display a dashboard, with sections like
+## Roadmap
 
-- total time (and total time by month/year/etc in line graph)
-- total time for each project (and total time by month/year/etc in line graph)
-- maybe some language breakdowns etc
+- [ ] Basic Query Display using commit-time-github
+- [ ] User/Repo Caching
+- [ ] Background jobs with AJAX Status
 
-Since it requires fairly heavy api usage, we might eventually make the calculations done on a job and display data via ajax. 
+#### Visualizations
+
+- [ ] total time (and total time by month/year/etc in line graph)
+- [ ] total time for each project (and total time by month/year in line graph)
+- [ ] maybe some language breakdowns etc
