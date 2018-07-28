@@ -15,6 +15,8 @@ end
 
 get '/user' do
   check_auth
+  redirect "/user/#{params[:login]}" unless params[:login].nil?
+
   # TODO: redirect to /user/login based on who owns this OAuth token
   erb :user
 end
