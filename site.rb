@@ -4,6 +4,8 @@ require 'sinatra'
 require 'rest-client'
 require 'json'
 
+require_relative 'api/commit-time-github'
+
 CLIENT_ID = File.read('client-id.token')
 CLIENT_SECRET = File.read('client-secret.token')
 
@@ -23,7 +25,7 @@ end
 
 get '/user/:login' do
   authenticate!
-  params.to_s
+  get_repo_list(session[:token], params[:login]).to_s
 end
 
 def authenticate!
