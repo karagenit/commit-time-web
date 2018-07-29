@@ -1,9 +1,14 @@
+function formatTime(minutes) {
+  return Math.floor(minutes / 60) + " Hours, " + Math.round(minutes % 60) + " Minutes";
+}
+
 function fillTable(entries) {
   $("#tbody").empty();
   entries.forEach(function(entry) {
-    $("#tbody").append("<tr><td>" + entry.name + "</td><td>" + entry.times + "</td></tr>");
+    $("#tbody").append("<tr><td>" + entry.name + "</td><td>" +
+                        formatTime(entry.times) + "</td></tr>");
   });
-} // TODO: format time
+}
 
 function forceUpdateCache() {
   $.ajax({
