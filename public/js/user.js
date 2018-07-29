@@ -3,6 +3,9 @@ function formatTime(minutes) {
 }
 
 function fillTable(entries) {
+  entries.sort(function(a,b) {
+    return b.times - a.times;
+  });
   $("#tbody").empty();
   entries.forEach(function(entry) {
     $("#tbody").append("<tr><td>" + entry.name + "</td><td>" +
