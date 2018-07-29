@@ -33,13 +33,15 @@ end
 
 post '/user/:login/update' do
   update_cache(session[:token], params[:login])
-  read_cache(params[:login]) # TODO: need to return JSON
-  "Updated"
+  read_cache(params[:login]).map do |repo|
+    { name: repo[:name], times: repo[:times].total_time }
+  end.to_json
 end
 
 post '/user/:login/populate' do
   populate_cache(session[:token], params[:login])
-  read_cache(params[:login]) # TODO: need to return JSON
-  "Populated"
+  read_cache(params[:login]).map do |repo|
+    { name: repo[:name], times: repo[:times].total_time }
+  end.to_json
 end
 
