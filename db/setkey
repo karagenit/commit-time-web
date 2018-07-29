@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'redis'
+require 'commit-time'
+
+exit if (ARGV.length != 2)
+
+key = ARGV[0]
+hours = ARGV[1].to_f
+
+redis = Redis.new
+
+dt = DateTime.parse("2018-01-01 10:00")
+dt2 = dt + (hours / 24)
+ct = CommitTime.new([dt, dt2])
+
+redis.set(key, Marshal.dump(ct))
