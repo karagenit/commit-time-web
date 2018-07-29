@@ -27,5 +27,6 @@ end
 
 get '/user/:login' do
   authenticate!
-  erb :user, locals: { repos: get_repos(session[:token], params[:login]) }
+  populate_cache(session[:token], params[:login])
+  erb :user, locals: { repos: read_cache(params[:login]) }
 end
