@@ -6,6 +6,7 @@ require_relative 'api/commit-time-github'
 
 require_relative 'auth'
 require_relative 'helpers'
+require_relative 'queries'
 
 enable :sessions
 
@@ -15,10 +16,13 @@ end
 
 get '/user' do
   authenticate!
+
+  # Used by search bar
   redirect "/user/#{params[:login]}" unless params[:login].nil?
 
-  # TODO: redirect to /user/login based on who owns this OAuth token
-  erb :search
+  # Redirect to the authorized user's page
+  session[:login] = get_login(session[:token])
+  redirect "/user/#{session[:login]}"
 end
 
 get '/user/:login' do
