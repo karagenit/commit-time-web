@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="theme-color" content="#000000">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
 
-        <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-        <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
-              crossorigin="anonymous">
-        <link rel="stylesheet" href="/css/main.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/main.css">
 
-        <title>Commit Time</title>
-    </head>
-    <body>
-        <nav class="navbar navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#">Commit Time</a>
-            </div>
-        </nav>
+    <title>Commit Time</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">Commit Time</a>
+        <form class="form-inline my-2 my-lg-0" type="POST" action="/user">
+          <input class="form-control mr-sm-2" type="search" name="login" placeholder="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
 
-        <div class="container">
-            <%= yield %>
-        </div>
+    <div class="container">
+      <%= yield %>
+    </div>
 
-    </body>
+  </body>
 </html>
