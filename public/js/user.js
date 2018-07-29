@@ -35,3 +35,7 @@ function populateCache() {
     }
   });
 }
+
+window.onload = function() {
+  populateCache();
+}
