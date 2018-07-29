@@ -9,14 +9,23 @@
         <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
 
         <!-- Bootstrap CSS -->
-        <link
-            rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
-            crossorigin="anonymous">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/main.css">
 
         <title>Commit Time</title>
     </head>
     <body>
-        <%= yield %>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">Commit Time</a>
+            </div>
+        </nav>
+
+        <div class="container">
+            <%= yield %>
+        </div>
+
     </body>
 </html>
