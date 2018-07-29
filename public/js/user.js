@@ -1,6 +1,9 @@
 function fillTable(entries) {
-  console.log(entries);
-}
+  $("#tbody").empty();
+  entries.forEach(function(entry) {
+    $("#tbody").append("<tr><td>" + entry.name + "</td><td>" + entry.times + "</td></tr>");
+  });
+} // TODO: format time
 
 function forceUpdateCache() {
   $.ajax({
@@ -14,10 +17,10 @@ function forceUpdateCache() {
       console.log(errorThrown);
     },
     success: function(result) {
-      fillTable(result);
+      fillTable(JSON.parse(result));
     }
   });
-}
+} // TODO: disable/change text of buttons
 
 function populateCache() {
   $.ajax({
@@ -31,7 +34,7 @@ function populateCache() {
       console.log(errorThrown);
     },
     success: function(result) {
-      fillTable(result);
+      fillTable(JSON.parse(result));
     }
   });
 }
