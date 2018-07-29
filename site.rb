@@ -28,10 +28,18 @@ end
 get '/user/:login' do
   authenticate!
   populate_cache(session[:token], params[:login])
-  erb :user, locals: { repos: read_cache(params[:login]) }
+  erb :user, locals: { name: params[:login] }
 end
 
 post '/user/:login/update' do
   update_cache(session[:token], params[:login])
-  "Successfully Updated Cache!"
+  read_cache(params[:login]) # TODO: need to return JSON
+  "Updated"
 end
+
+post '/user/:login/populate' do
+  populate_cache(session[:token], params[:login])
+  read_cache(params[:login]) # TODO: need to return JSON
+  "Populated"
+end
+
