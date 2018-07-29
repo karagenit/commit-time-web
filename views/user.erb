@@ -1,8 +1,20 @@
-<table>
-    <% repos.each do |repo| %>
+<table class="table">
+    <thead>
         <tr>
-            <td><%= repo[:name] %></td>
-            <td><%= time_fmt repo[:times].total_time %></td>
+            <th>Repo Name</th>
+            <th>Time Spent</th>
         </tr>
-    <% end %>
+    </thead>
+    <tbody>
+        <% repos.each do |repo| %>
+            <tr>
+                <td>
+                    <a href="https://github.com/<%= repo[:name] %>"><%= repo[:name] %></a>
+                </td>
+                <td>
+                    <%= time_fmt repo[:times].total_time %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
 </table>
