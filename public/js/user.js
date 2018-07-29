@@ -11,6 +11,9 @@ function fillTable(entries) {
 }
 
 function forceUpdateCache() {
+  $("#btn-update").prop('disabled', true);
+  $("#btn-update").text("Working...");
+
   $.ajax({
     type: 'post',
     url: window.location.pathname + '/update',
@@ -23,11 +26,18 @@ function forceUpdateCache() {
     },
     success: function(result) {
       fillTable(JSON.parse(result));
+    },
+    complete: function() {
+      $("#btn-update").prop('disabled', false);
+      $("#btn-update").text("Update All Repos");
     }
   });
-} // TODO: disable/change text of buttons
+}
 
 function populateCache() {
+  $("#btn-populate").prop('disabled', true);
+  $("#btn-populate").text("Working...");
+  
   $.ajax({
     type: 'post',
     url: window.location.pathname + '/populate',
@@ -40,6 +50,10 @@ function populateCache() {
     },
     success: function(result) {
       fillTable(JSON.parse(result));
+    },
+    complete: function() {
+      $("#btn-populate").prop('disabled', false);
+      $("#btn-populate").text("Update Repo List");
     }
   });
 }
