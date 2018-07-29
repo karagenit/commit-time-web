@@ -22,10 +22,15 @@ def get_repos(token, login)
   puts "Repos: #{repos.count}"
 
   values = repos.map do |repo|
+    # Repo full name, as karagenit/commit-time
     fullname = repo[:owner] + '/' + repo[:name]
+    # Key names specifically per-user, as different users
+    # may have different contrib stats for the same repo,
+    # as karagenit:karagenit/commit-time
+    keyname = login + ':' + fullname
     data = { name: fullname, times: nil }
 
-    blob = redis.get(fullname)
+    blob = redis.get(keyname)
 
     if !blob.nil?
       data[:times] = Marshal.load(blob) # TODO: exception check
@@ -33,7 +38,7 @@ def get_repos(token, login)
     else
       repo = get_repo(token, repo[:owner], repo[:name], author: login)
       data[:times] = repo
-      redis.set(fullname, Marshal.dump(repo)) # TODO: handle errors
+      redis.set(keyname, Marshal.dump(repo)) # TODO: handle errors
       data
     end
   end
