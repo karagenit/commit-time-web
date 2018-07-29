@@ -1,0 +1,3 @@
+function forceUpdateCache() {
+  alert('hi');
+}

@@ -1,20 +1,26 @@
+<h1>Your Times</h1>
+
+<button class="btn btn-outline-success" onclick="forceUpdateCache()">Update List</button>
+
 <table class="table">
-    <thead>
-        <tr>
-            <th>Repo Name</th>
-            <th>Time Spent</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% repos.each do |repo| %>
-            <tr>
-                <td>
-                    <a href="https://github.com/<%= repo[:name] %>"><%= repo[:name] %></a>
-                </td>
-                <td>
-                    <%= time_fmt repo[:times].total_time %>
-                </td>
-            </tr>
-        <% end %>
-    </tbody>
+  <thead>
+    <tr>
+      <th>Repo Name</th>
+      <th>Time Spent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% repos.each do |repo| %>
+    <tr>
+      <td>
+        <a href="https://github.com/<%= repo[:name] %>"><%= repo[:name] %></a>
+      </td>
+      <td>
+        <%= time_fmt repo[:times].total_time %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
 </table>
+
+<script src="/js/ajax.js"></script>
