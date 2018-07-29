@@ -30,3 +30,8 @@ get '/user/:login' do
   populate_cache(session[:token], params[:login])
   erb :user, locals: { repos: read_cache(params[:login]) }
 end
+
+post '/user/:login/update' do
+  update_cache(session[:token], params[:login])
+  "Successfully Updated Cache!"
+end
