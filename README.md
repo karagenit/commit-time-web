@@ -4,11 +4,13 @@ Web Dashboard for commit-time
 ## Roadmap
 
 - [x] Basic Query Display using commit-time-github
-- [ ] Improve styling
-- [ ] User/Repo Caching (manual buttons for list & each repo)
+- [x] Improve styling
+- [x] User/Repo Caching
+- [ ] Force-update cache
+- [ ] Pagination
 - [ ] Background jobs with AJAX Status
-- [ ] Auto timestamp-based cache update - if new commits, fetch them
-- [ ] Cache all commit timestamps instead of just total times - reduces cache update work (just grab the new commits)
+- [ ] Auto timestamp-based (or most-recent-commit-has based??) cache update - if new commits, fetch them
+- [ ] On cache update, only grab commits we don't have in our CommitTime objects
 
 #### Visualizations
 
