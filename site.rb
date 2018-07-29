@@ -27,5 +27,5 @@ end
 
 get '/user/:login' do
   authenticate!
-  erb :user, locals: { repos: get_all_repos(session[:token], params[:login]) }
+  erb :user, locals: { repos: get_repos(session[:token], params[:login]) }
 end
