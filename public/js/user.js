@@ -1,15 +1,25 @@
 function formatTime(minutes) {
-  return Math.floor(minutes / 60) + " Hours, " + Math.round(minutes % 60) + " Minutes";
+  if (minutes >= 60) {
+    return Math.floor(minutes / 60) + " Hours, " + Math.round(minutes % 60) + " Minutes";
+  } else {
+    return Math.round(minutes) + " Minutes";
+  }
 }
 
 function fillTable(entries) {
   entries.sort(function(a,b) {
-    return b.times - a.times;
+    return b.total - a.total;
   });
   $("#tbody").empty();
-  entries.forEach(function(entry) {
-    $("#tbody").append("<tr><td>" + entry.name + "</td><td>" +
-                        formatTime(entry.times) + "</td></tr>");
+  entries.forEach(function(entry, index) {
+    if (entry.total > 0) {
+      $("#tbody").append("<tr><th>" + 
+                          (index+1) + "</th><td>" +
+                          entry.name + "</td><td>" +
+                          formatTime(entry.total) + "</td><td>" +
+                          entry.commits + "</td><td>" +
+                          formatTime(entry.average) + "</td></tr>");
+    }
   });
 }
 
