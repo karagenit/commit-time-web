@@ -2,6 +2,13 @@ require 'github/graphql'
 require 'redis'
 
 def get_login(token)
+  if session[:login].nil?
+    session[:login] = query_login(token)
+  end
+  session[:login]
+end
+
+def query_login(token)
   query = %{
     query {
       viewer {

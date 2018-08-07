@@ -21,8 +21,7 @@ get '/user' do
   redirect "/user/#{params[:login]}" unless params[:login].nil?
 
   # Redirect to the authorized user's page
-  session[:login] = get_login(session[:token])
-  redirect "/user/#{session[:login]}"
+  redirect "/user/#{get_login(session[:token])}"
 end
 
 get '/user/:login' do
