@@ -2,8 +2,6 @@
 
 require 'sinatra'
 
-require_relative 'api/commit-time-github'
-
 require_relative 'auth'
 require_relative 'helpers'
 require_relative 'queries'

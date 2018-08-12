@@ -1,6 +1,10 @@
 require 'github/graphql'
+require 'commit-time'
+require 'date'
 require 'redis'
 
+##
+# Gets the current session login or queries from the API
 def get_login(token)
   if session[:login].nil?
     session[:login] = query_login(token)
@@ -8,6 +12,8 @@ def get_login(token)
   session[:login]
 end
 
+##
+# Queries the Github API for the login of the owner of the session token
 def query_login(token)
   query = %{
     query {
@@ -50,6 +56,8 @@ def populate_cache(token, login)
   end
 end
 
+##
+# Reads the list of commit-times from the Redis cache
 def read_cache(login)
   redis = Redis.new
   repos = redis.keys("#{login}:*/*").map do |key|
@@ -57,4 +65,109 @@ def read_cache(login)
     { name: fullname, times: Marshal.load(redis.get(key)) }
   end
   repos.reject { |repo| repo[:times].nil? }
+end
+
+##
+# Returns a CommitTime object from a given Github repo.
+# Commits are filtered such that only those authored by :author (which is,
+# by default, equal to :user) are saved. Passing "" for :author will *jankily*
+# calculate times for all users.
+#
+# TODO: rename user -> owner
+# TODO: use :dig more
+#
+def get_repo(token, user, repo, author: user)
+  query = %{
+    query ($user: String!, $repo: String!, $cursor: String) {
+      repository(owner: $user, name: $repo) {
+        defaultBranchRef {
+          target {
+            ... on Commit {
+              history(first: 100, after: $cursor) {
+                edges {
+                  node {
+                    author {
+                      user {
+                        login
+                      }
+                    }
+                    authoredDate
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  vars = { user: user, repo: repo }
+
+  commits = []
+  continue = true
+  cursor = nil
+
+  while continue do
+    vars[:cursor] = cursor
+    result = Github.query(token, query, vars)
+    commits += result.dig("data", "repository", "defaultBranchRef", "target", "history", "edges").to_a
+    continue = result.dig("data", "repository", "defaultBranchRef", "target", "history", "pageInfo", "hasNextPage") || false
+    cursor = result.dig("data", "repository", "defaultBranchRef", "target", "history", "pageInfo", "endCursor")
+  end
+
+  # Empty repo with no commits or default branch
+  return nil if commits.nil?
+
+  commits.select! { |e| e.dig("node", "author", "user", "login") == author }
+  dates = commits.map { |e| e["node"]["authoredDate"] }
+  dates.map! { |date| DateTime.parse(date) }
+
+  CommitTime.new(dates)
+end
+
+##
+# TODO: use #dig more
+#
+def get_repo_list(token, user)
+  query = %{
+    query ($user: String!, $cursor: String) {
+      user(login: $user) {
+        repositories(first: 100, after: $cursor) {
+          edges {
+            node {
+              name
+              owner {
+                login
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  }
+
+  vars = { user: user }
+
+  repos = []
+  continue = true
+  cursor = nil
+
+  while continue do
+    vars[:cursor] = cursor
+    result = Github.query(token, query, vars)
+    repos += result.dig("data", "user", "repositories", "edges").to_a
+    continue = result.dig("data", "user", "repositories", "pageInfo", "hasNextPage") || false
+    cursor = result.dig("data", "user", "repositories", "pageInfo", "endCursor")
+  end
+
+  repos.map { |e| { owner: e["node"]["owner"]["login"], name: e["node"]["name"] } }
 end
