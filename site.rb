@@ -4,7 +4,8 @@ require 'sinatra'
 
 require_relative 'auth'
 require_relative 'helpers'
-require_relative 'queries'
+require_relative 'api'
+require_relative 'db'
 
 enable :sessions
 
