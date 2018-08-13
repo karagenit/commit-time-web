@@ -34,7 +34,8 @@ describe "My Sinatra Application" do
 
   it "should be able to query the API for a specific repo" do
     token = File.read('api.token')
-    repo = get_repo(token, 'karagenit', 'homepage')
+    authorID = query_id(token, 'karagenit')
+    repo = get_repo(token, 'karagenit', 'homepage', authorID)
     expect(repo).to_not be(nil)
     expect(repo.total_time).to be > 60
   end
@@ -51,6 +52,8 @@ describe "My Sinatra Application" do
     expect(last_response.status).to eq(302)
     expect(last_response.original_headers['Location']).to end_with('/user/karagenit')
   end
+
+  # TODO: specs for get_repo and get_repo_list
 
   # TODO: test for redirect to Github when session[:token] is nil
 end

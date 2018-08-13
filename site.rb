@@ -30,7 +30,7 @@ end
 
 post '/user/:login/update' do
   update_cache(session[:token], params[:login])
-  read_cache(params[:login]).map do |repo|
+  read_cache(params[:login]).map do |repo| # TODO return proper format in read_cache
     { name: repo[:name],
       total: repo[:times].total_time,
       commits: repo[:times].commits,

@@ -47,21 +47,16 @@ end
 # by default, equal to :user) are saved. Passing "" for :author will *jankily*
 # calculate times for all users.
 #
-def get_repo(token, owner, repo, author = owner)
+def get_repo(token, owner, repo, authorID)
   query = %{
-    query ($owner: String!, $repo: String!, $cursor: String) {
+    query ($owner: String!, $repo: String!, $cursor: String, $author: CommitAuthor) {
       repository(owner: $owner, name: $repo) {
         defaultBranchRef {
           target {
             ... on Commit {
-              history(first: 100, after: $cursor) {
+              history(first: 100, after: $cursor, author: $author) {
                 edges {
                   node {
-                    author {
-                      user {
-                        login
-                      }
-                    }
                     authoredDate
                   }
                 }
@@ -77,7 +72,7 @@ def get_repo(token, owner, repo, author = owner)
     }
   }
 
-  vars = { owner: owner, repo: repo, cursor: nil }
+  vars = { owner: owner, repo: repo, cursor: nil, author: { id: authorID } }
 
   commits = []
 
@@ -87,16 +82,15 @@ def get_repo(token, owner, repo, author = owner)
     info = result.dig('data', 'repository', 'defaultBranchRef', 'target', 'history', 'pageInfo')
 
     commits += edges || []
-    break unless info.dig('hasNextPage')
-    vars[:cursor] = info.dig('endCursor')
+    break unless info&.dig('hasNextPage')
+    vars[:cursor] = info&.dig('endCursor')
   end
 
   # Empty repo with no commits or default branch
-  return nil if commits.nil?
+  return nil if commits.nil? # TODO: return empty CommitTime object, what about #empty?
 
-  commits.select! { |e| e.dig("node", "author", "user", "login") == author }
   dates = commits.map { |e| e.dig("node", "authoredDate") }
-  dates.map! { |date| DateTime.parse(date) }
+  dates.map! { |date| DateTime.parse(date) } # TODO: simplify, check if date is nil
 
   CommitTime.new(dates)
 end

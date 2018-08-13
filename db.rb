@@ -11,10 +11,11 @@ require_relative 'api'
 def update_cache(token, login)
   redis = Redis.new
   repos = get_repo_list(token, login)
+  authorID = query_id(token, login)
 
   repos.each do |repo|
     keyname = login + ':' + repo[:owner] + '/' + repo[:name]
-    ct = get_repo(token, repo[:owner], repo[:name], author: login)
+    ct = get_repo(token, repo[:owner], repo[:name], authorID)
     redis.set(keyname, Marshal.dump(ct)) # no nil check
   end
 end
@@ -25,11 +26,12 @@ end
 def populate_cache(token, login)
   redis = Redis.new
   repos = get_repo_list(token, login)
+  authorID = query_id(token, login)
 
   repos.each do |repo|
     keyname = login + ':' + repo[:owner] + '/' + repo[:name]
     if redis.get(keyname).nil? # TODO: what if it deserializes to NilClass?
-      ct = get_repo(token, repo[:owner], repo[:name], author: login)
+      ct = get_repo(token, repo[:owner], repo[:name], authorID)
       redis.set(keyname, Marshal.dump(ct))
     end
   end
