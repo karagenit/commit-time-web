@@ -7,10 +7,7 @@ require 'redis'
 # Gets the current session login or queries from the API
 #
 def get_login(token)
-  if session[:login].nil?
-    session[:login] = query_login(token)
-  end
-  session[:login]
+  session[:login] ||= query_login(token)
 end
 
 ##
@@ -25,9 +22,7 @@ def query_login(token)
     }
   }
 
-  result = Github.query(token, query)
-
-  result.dig("data", "viewer", "login")
+  Github.query(token, query).dig('data', 'viewer', 'login')
 end
 
 ##
