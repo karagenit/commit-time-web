@@ -130,7 +130,7 @@ def get_repo(token, owner, repo, author = owner)
 end
 
 ##
-# TODO: use #dig more
+# Get a list of repositories for the given user
 #
 def get_repo_list(token, user)
   query = %{
@@ -154,19 +154,16 @@ def get_repo_list(token, user)
     }
   }
 
-  vars = { user: user }
+  vars = { user: user, cursor: nil }
 
   repos = []
-  continue = true
-  cursor = nil
 
-  while continue do
-    vars[:cursor] = cursor
+  loop do
     result = Github.query(token, query, vars)
-    repos += result.dig("data", "user", "repositories", "edges").to_a
-    continue = result.dig("data", "user", "repositories", "pageInfo", "hasNextPage") || false
-    cursor = result.dig("data", "user", "repositories", "pageInfo", "endCursor")
+    repos += result.dig("data", "user", "repositories", "edges") || []
+    break unless result.dig("data", "user", "repositories", "pageInfo", "hasNextPage")
+    vars[:cursor] = result.dig("data", "user", "repositories", "pageInfo", "endCursor")
   end
 
-  repos.map { |e| { owner: e["node"]["owner"]["login"], name: e["node"]["name"] } }
+  repos.map { |e| { owner: e.dig("node", "owner", "login"), name: e.dig("node", "name") } }
 end
