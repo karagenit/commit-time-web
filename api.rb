@@ -86,11 +86,17 @@ def get_repo(token, owner, repo, authorID)
     vars[:cursor] = info&.dig('endCursor')
   end
 
-  # Empty repo with no commits or default branch
-  return nil if commits.nil? # TODO: return empty CommitTime object, what about #empty?
+  dates = commits.map do |commit|
+    date = commit.dig('node', 'authoredDate')
+    begin
+      DateTime.parse(date)
+    rescue ArgumentError
+      nil
+    end
+  end
 
-  dates = commits.map { |e| e.dig("node", "authoredDate") }
-  dates.map! { |date| DateTime.parse(date) } # TODO: simplify, check if date is nil
+  # Remove nil entries where DateTime raised an error
+  dates.compact!
 
   CommitTime.new(dates)
 end
