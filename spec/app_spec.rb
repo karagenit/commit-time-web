@@ -24,4 +24,17 @@ describe "My Sinatra Application" do
     expect(repo).to_not be(nil)
     expect(repo.total_time).to be > 60
   end
+
+  it "should load the user page when session[:token] is set" do
+    env 'rack.session', { token: File.read('api.token') }
+    get '/user/karagenit'
+    expect(last_response).to be_ok
+  end
+
+  it "should redirect to the user's homepage when authenticated" do
+    env 'rack.session', { token: File.read('api.token') }
+    get '/user'
+    expect(last_response.status).to eq(302)
+    expect(last_response.original_headers['Location']).to end_with('/user/karagenit')
+  end
 end

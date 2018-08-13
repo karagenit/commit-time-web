@@ -73,8 +73,6 @@ end
 # by default, equal to :user) are saved. Passing "" for :author will *jankily*
 # calculate times for all users.
 #
-# TODO: use :dig more
-#
 def get_repo(token, owner, repo, author = owner)
   query = %{
     query ($owner: String!, $repo: String!, $cursor: String) {
