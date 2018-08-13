@@ -73,13 +73,12 @@ end
 # by default, equal to :user) are saved. Passing "" for :author will *jankily*
 # calculate times for all users.
 #
-# TODO: rename user -> owner
 # TODO: use :dig more
 #
-def get_repo(token, user, repo, author: user)
+def get_repo(token, owner, repo, author = owner)
   query = %{
-    query ($user: String!, $repo: String!, $cursor: String) {
-      repository(owner: $user, name: $repo) {
+    query ($owner: String!, $repo: String!, $cursor: String) {
+      repository(owner: $owner, name: $repo) {
         defaultBranchRef {
           target {
             ... on Commit {
@@ -106,7 +105,7 @@ def get_repo(token, user, repo, author: user)
     }
   }
 
-  vars = { user: user, repo: repo }
+  vars = { owner: owner, repo: repo }
 
   commits = []
   continue = true
