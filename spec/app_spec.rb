@@ -1,5 +1,14 @@
 require File.expand_path '../spec_helper.rb', __FILE__
 
+# TODO: helper script to create api.token
+# TODO: don't hardcode 'karagenit', load from config file?
+# TODO: make API-based tests optional (for speed)
+# TODO: only run api tests if api.token is present
+# TODO: use mock api queries (which just return hardcoded repo stats/repo lists for testing
+#       update_cache etc.
+# TODO: load tokens etc in a :before hook
+# TODO: use different redis store for tests
+
 describe "My Sinatra Application" do
   it "should allow accessing the home page" do
     get '/'
@@ -37,4 +46,6 @@ describe "My Sinatra Application" do
     expect(last_response.status).to eq(302)
     expect(last_response.original_headers['Location']).to end_with('/user/karagenit')
   end
+
+  # TODO: test for redirect to Github when session[:token] is nil
 end
