@@ -26,6 +26,22 @@ def query_login(token)
 end
 
 ##
+# Queries the Github API for a given user's unique ID
+#
+def query_id(token, login)
+  query = %{
+    query ($login: String!) {
+      user (login: $login) {
+        id
+      }
+    }
+  }
+
+  vars = { login: login }
+  Github.query(token, query, vars).dig('data', 'user', 'id')
+end
+
+##
 # Returns a CommitTime object from a given Github repo.
 # Commits are filtered such that only those authored by :author (which is,
 # by default, equal to :user) are saved. Passing "" for :author will *jankily*

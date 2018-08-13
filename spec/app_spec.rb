@@ -20,6 +20,11 @@ describe "My Sinatra Application" do
     expect(query_login(token)).to eq('karagenit')
   end
 
+  it "should be able to get a user's github ID tag" do
+    token = File.read("api.token")
+    expect(query_id(token, 'karagenit')).to_not eq(nil)
+  end
+
   it "should be able to query the API for a repo list" do
     token = File.read("api.token")
     repos = get_repo_list(token, 'karagenit')
