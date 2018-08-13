@@ -105,25 +105,25 @@ def get_repo(token, owner, repo, author = owner)
     }
   }
 
-  vars = { owner: owner, repo: repo }
+  vars = { owner: owner, repo: repo, cursor: nil }
 
   commits = []
-  continue = true
-  cursor = nil
 
-  while continue do
-    vars[:cursor] = cursor
+  loop do
     result = Github.query(token, query, vars)
-    commits += result.dig("data", "repository", "defaultBranchRef", "target", "history", "edges").to_a
-    continue = result.dig("data", "repository", "defaultBranchRef", "target", "history", "pageInfo", "hasNextPage") || false
-    cursor = result.dig("data", "repository", "defaultBranchRef", "target", "history", "pageInfo", "endCursor")
+    edges = result.dig('data', 'repository', 'defaultBranchRef', 'target', 'history', 'edges')
+    info = result.dig('data', 'repository', 'defaultBranchRef', 'target', 'history', 'pageInfo')
+
+    commits += edges || []
+    break unless info.dig('hasNextPage')
+    vars[:cursor] = info.dig('endCursor')
   end
 
   # Empty repo with no commits or default branch
   return nil if commits.nil?
 
   commits.select! { |e| e.dig("node", "author", "user", "login") == author }
-  dates = commits.map { |e| e["node"]["authoredDate"] }
+  dates = commits.map { |e| e.dig("node", "authoredDate") }
   dates.map! { |date| DateTime.parse(date) }
 
   CommitTime.new(dates)
