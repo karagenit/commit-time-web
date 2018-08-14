@@ -1,6 +1,8 @@
-# Commit Time Web Dashboard
+# Commit Time Web
 
 Web Dashboard for [commit-time](https://github.com/karagenit/commit-time).
+
+![commit time web](screenshot.png)
 
 ## Setup
 
