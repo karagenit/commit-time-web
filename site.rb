@@ -28,27 +28,21 @@ get '/user/:login' do
   erb :user, locals: { name: params[:login] }
 end
 
-post '/user/:login/update' do
-  populate_cache(session[:token], params[:login])
-  force_update_cache(session[:token], params[:login])
-  read_cache(params[:login]).map do |repo| # TODO return proper format in read_cache
-    { name: repo[:name],
-      total: repo[:times].total_time,
-      commits: repo[:times].commits,
-      average: repo[:times].average_time
-    }
-  end.to_json
+post '/user/:login/read' do
+  read_cache(params[:login])
 end
 
-post '/user/:login/populate' do
+# TODO: don't need to populate here, since /update is called when the page loads
+#       so we know populate has already been called.
+post '/user/:login/forceupdate' do
+  populate_cache(session[:token], params[:login])
+  force_update_cache(session[:token], params[:login])
+  read_cache(params[:login])
+end
+
+post '/user/:login/update' do
   populate_cache(session[:token], params[:login])
   update_cache(session[:token], params[:login])
-  read_cache(params[:login]).map do |repo|
-     { name: repo[:name],
-      total: repo[:times].total_time,
-      commits: repo[:times].commits,
-      average: repo[:times].average_time
-    }
-  end.to_json
+  read_cache(params[:login])
 end
 

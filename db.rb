@@ -61,7 +61,21 @@ def read_cache(login)
   redis = Redis.new
   repos = redis.keys("#{login}:*/*").map do |key|
     _, fullname = key.split(':', 2)
-    { name: fullname, times: Marshal.load(redis.get(key)) }
+    begin
+      { name: fullname, times: Marshal.load(redis.get(key)) }
+    rescue Error
+      { name: fullname, times: nil }
+      # TODO: Could we just next or nil here and then repos.compact! later?
+      # Is there any case where we would serialize a nil object into redis?
+    end
   end
-  repos.reject { |repo| repo[:times].nil? }
+  repos.reject! { |repo| repo[:times].nil? }
+  repos.map! do |repo|
+    { name: repo[:name],
+      total: repo[:times].total_time,
+      commits: repo[:times].commits,
+      average: repo[:times].average_time
+    }
+  end
+  repos.to_json
 end

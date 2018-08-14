@@ -29,7 +29,7 @@ function forceUpdateCache() {
 
   $.ajax({
     type: 'post',
-    url: window.location.pathname + '/update',
+    url: window.location.pathname + '/forceupdate',
     timeout: 0,
     error: function(jqXHR, textStatus, errorThrown) {
       console.log("Error:");
@@ -53,7 +53,7 @@ function populateCache() {
   
   $.ajax({
     type: 'post',
-    url: window.location.pathname + '/populate',
+    url: window.location.pathname + '/update',
     timeout: 0,
     error: function(jqXHR, textStatus, errorThrown) {
       console.log("Error:");
