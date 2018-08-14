@@ -5,18 +5,37 @@ require 'redis'
 
 require_relative 'api'
 
+#
+# Important note about Redis#get: if the key doesn't exist
+# in the DB, it will return nil, but if the key was added
+# with Redis.set(key, nil), it will return "" (empty string)
+#
+
 ##
-# Force update cache from Github API
+# For each repo contributed to by :login, update repo info
+#
+def force_update_cache(token, login)
+  redis = Redis.new
+  authorID = query_id(token, login)
+
+  redis.keys("#{login}:*/*").each do |key|
+    owner, name = key.split(':', 2)[1].split('/', 2)
+    redis.set key, Marshal.dump(get_repo(token, owner, name, authorID))
+  end
+end
+
+##
+# For each repo contributed to by :login that has no info, get repo info
 #
 def update_cache(token, login)
   redis = Redis.new
-  repos = get_repo_list(token, login)
   authorID = query_id(token, login)
 
-  repos.each do |repo|
-    keyname = login + ':' + repo[:owner] + '/' + repo[:name]
-    ct = get_repo(token, repo[:owner], repo[:name], authorID)
-    redis.set(keyname, Marshal.dump(ct)) # no nil check
+  redis.keys("#{login}:*/*").each do |key|
+    if redis.get(key).empty?
+      owner, name = key.split(':', 2)[1].split('/', 2)
+      redis.set key, Marshal.dump(get_repo(token, owner, name, authorID))
+    end
   end
 end
 
@@ -26,13 +45,11 @@ end
 def populate_cache(token, login)
   redis = Redis.new
   repos = get_repo_list(token, login)
-  authorID = query_id(token, login)
 
   repos.each do |repo|
     keyname = login + ':' + repo[:owner] + '/' + repo[:name]
-    if redis.get(keyname).nil? # TODO: what if it deserializes to NilClass?
-      ct = get_repo(token, repo[:owner], repo[:name], authorID)
-      redis.set(keyname, Marshal.dump(ct))
+    if redis.get(keyname).nil?
+      redis.set keyname, nil
     end
   end
 end

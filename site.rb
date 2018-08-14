@@ -29,7 +29,8 @@ get '/user/:login' do
 end
 
 post '/user/:login/update' do
-  update_cache(session[:token], params[:login])
+  populate_cache(session[:token], params[:login])
+  force_update_cache(session[:token], params[:login])
   read_cache(params[:login]).map do |repo| # TODO return proper format in read_cache
     { name: repo[:name],
       total: repo[:times].total_time,
@@ -41,6 +42,7 @@ end
 
 post '/user/:login/populate' do
   populate_cache(session[:token], params[:login])
+  update_cache(session[:token], params[:login])
   read_cache(params[:login]).map do |repo|
      { name: repo[:name],
       total: repo[:times].total_time,
