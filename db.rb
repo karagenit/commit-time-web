@@ -63,7 +63,7 @@ def read_cache(login)
     _, fullname = key.split(':', 2)
     begin
       { name: fullname, times: Marshal.load(redis.get(key)) }
-    rescue Error
+    rescue ArgumentError, TypeError
       { name: fullname, times: nil }
       # TODO: Could we just next or nil here and then repos.compact! later?
       # Is there any case where we would serialize a nil object into redis?
