@@ -7,7 +7,7 @@ require File.expand_path '../spec_helper.rb', __FILE__
 # TODO: use mock api queries (which just return hardcoded repo stats/repo lists for testing
 #       update_cache etc.
 # TODO: load tokens etc in a :before hook
-# TODO: use different redis store for tests
+# TODO: use different redis store for tests, and wipe before tests!
 
 describe "My Sinatra Application" do
   it "should allow accessing the home page" do

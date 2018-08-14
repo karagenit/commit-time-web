@@ -10,5 +10,5 @@ end
 
 task :test do
     sh "rspec"
-    # TODO: rubocop
+    sh "rubocop api.rb auth.rb db.rb helpers.rb site.rb"
 end
