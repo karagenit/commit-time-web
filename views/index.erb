@@ -1,9 +1,22 @@
-<html>
-    <head>
-    </head>
-    <body>
-        <h1>Analyze Your Time Spent Committing on Github</h1>
-        <p>This website uses Github OAuth to read your repository commit information.</p>
-        <a class="btn btn-success" href="/user">Authorize</a>
-    </body>
-</html>
+<div class="col-md-8 offset-md-2">
+  <h1>Commit Time</h1>
+  <h4>
+    Commit Time is a web application that uses the Github API to 
+    determine how long you've spent writing code in your repositories.
+  </h4>
+  <hr>
+  <p>
+    To get started, click the button below to authorize Commit Time 
+    to read your repository data (you will be redirected to Github).
+  </p>
+  <a class="btn btn-primary btn-lg" href="/user" role="button">Authorize</a>
+
+  <h1 class="center">&middot; &middot; &middot;</h1>
+
+  <h2>How It Works</h2>
+  <p>
+    This website is built on Sinatra, a Ruby web framework. 
+    The site loads repo data asynchronously via AJAX. The backend uses a Redis store as a cache.
+    Source code can be found on <a href="https://github.com/karagenit/commit-time-web">Github</a>.
+  </p>
+</div>

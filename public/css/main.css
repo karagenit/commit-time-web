@@ -9,3 +9,22 @@
 .btn {
     margin-right: 10px;
 }
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 300;
+}
+
+h2 {
+    font-size: 2.8rem;
+    font-weight: 300;
+}
+
+h4 {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.center {
+    text-align: center;
+}
