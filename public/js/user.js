@@ -32,11 +32,14 @@ function formatTime(minutes) {
 }
 
 function fillTable(entries) {
+  var total = 0;
+
   entries.sort(function(a,b) {
     return b.total - a.total;
   });
   $("#tbody").empty();
   entries.forEach(function(entry, index) {
+    total += entry.total;
     if (entry.total > 0) {
       $("#tbody").append("<tr><th>" + 
         (index+1) + "</th><td>" +
@@ -46,6 +49,7 @@ function fillTable(entries) {
         formatTime(entry.average) + "</td></tr>");
     }
   });
+  $("#totalTime").html(formatTime(total));
 }
 
 function forceUpdateCache() {
