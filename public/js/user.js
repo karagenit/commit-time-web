@@ -1,3 +1,28 @@
+var intervalUpdate;
+
+function startUpdate() {
+  intervalUpdate = setInterval(function() {
+    $.ajax({
+      type: 'post',
+      url: window.location.pathname + '/read',
+      timeout: 0,
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log("Error:");
+        console.log(jqXHR.responseText);
+        console.log(textStatus);
+        console.log(errorThrown);
+      },
+      success: function(result) {
+        fillTable(JSON.parse(result));
+      }
+    });
+  }, 3000);
+}
+
+function stopUpdate() {
+  clearInterval(intervalUpdate);
+}
+
 function formatTime(minutes) {
   if (minutes >= 60) {
     return Math.floor(minutes / 60) + " Hours, " + Math.round(minutes % 60) + " Minutes";
@@ -14,11 +39,11 @@ function fillTable(entries) {
   entries.forEach(function(entry, index) {
     if (entry.total > 0) {
       $("#tbody").append("<tr><th>" + 
-                          (index+1) + "</th><td>" +
-                          entry.name + "</td><td>" +
-                          formatTime(entry.total) + "</td><td>" +
-                          entry.commits + "</td><td>" +
-                          formatTime(entry.average) + "</td></tr>");
+        (index+1) + "</th><td>" +
+        entry.name + "</td><td>" +
+        formatTime(entry.total) + "</td><td>" +
+        entry.commits + "</td><td>" +
+        formatTime(entry.average) + "</td></tr>");
     }
   });
 }
@@ -48,6 +73,7 @@ function forceUpdateCache() {
 }
 
 function updateCache() {
+  startUpdate();
   $.ajax({
     type: 'post',
     url: window.location.pathname + '/update',
@@ -60,6 +86,9 @@ function updateCache() {
     },
     success: function(result) {
       fillTable(JSON.parse(result));
+    },
+    complete: function() {
+      stopUpdate();
     }
   });
 }
