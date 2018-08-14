@@ -47,10 +47,7 @@ function forceUpdateCache() {
   });
 }
 
-function populateCache() {
-  $("#btn-populate").prop('disabled', true);
-  $("#btn-populate").text("Working...");
-  
+function updateCache() {
   $.ajax({
     type: 'post',
     url: window.location.pathname + '/update',
@@ -63,14 +60,10 @@ function populateCache() {
     },
     success: function(result) {
       fillTable(JSON.parse(result));
-    },
-    complete: function() {
-      $("#btn-populate").prop('disabled', false);
-      $("#btn-populate").text("Update Repo List");
     }
   });
 }
 
 window.onload = function() {
-  populateCache();
+  updateCache();
 }
