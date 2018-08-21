@@ -45,3 +45,12 @@ h4 {
 .center {
     text-align: center;
 }
+
+.index-callout > .btn {
+    margin-bottom: 12px;
+    margin-top: 10px;
+}
+
+.index-callout > p {
+    margin-bottom: 6px;
+}
