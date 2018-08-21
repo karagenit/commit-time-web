@@ -10,7 +10,7 @@ def authenticate!
 end
 
 get '/auth/create' do
-  scopes = "repo read:user"
+  scopes = "public_repo read:user"
   redirect "https://github.com/login/oauth/authorize?scope=#{scopes}&client_id=#{CLIENT_ID}"
 end
 
