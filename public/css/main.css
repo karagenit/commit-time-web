@@ -25,6 +25,7 @@ h4 {
     font-weight: 300;
 }
 
+/* TODO: use BS .text-center */
 .center {
     text-align: center;
 }

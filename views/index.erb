@@ -9,14 +9,16 @@
     To get started, click the button below to authorize Commit Time 
     to read your repository data (you will be redirected to Github).
   </p>
-  <a class="btn btn-primary btn-lg" href="/user" role="button">Authorize</a>
-
-  <h1 class="center">&middot; &middot; &middot;</h1>
-
-  <h2>How It Works</h2>
-  <p>
-    This website is built on Sinatra, a Ruby web framework. 
-    The site loads repo data asynchronously via AJAX. The backend uses a Redis store as a cache.
-    Source code can be found on <a href="https://github.com/karagenit/commit-time-web">Github</a>.
-  </p>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <a class="btn btn-primary btn-lg btn-block" href="/user" role="button">Authorize</a>
+      <br>
+      <p class="text-center">or</p>
+      <p class="text-center">
+        <a href="https://github.com/karagenit/commit-time-web">
+          View the Source Code
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
