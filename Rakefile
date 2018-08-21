@@ -1,7 +1,7 @@
 task :default => %i[run]
 
 task :run do
-    sh "ruby site.rb"
+    sh "rackup"
 end
 
 task :setup do

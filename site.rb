@@ -7,7 +7,9 @@ require_relative 'helpers'
 require_relative 'api'
 require_relative 'db'
 
-enable :sessions
+configure do
+  enable :sessions
+end
 
 get '/' do
   erb :index
