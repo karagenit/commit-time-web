@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'sinatra'
+require 'dotenv/load'
 
 require_relative 'auth'
 require_relative 'helpers'

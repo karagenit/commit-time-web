@@ -5,6 +5,7 @@ GEM
     diff-lcs (1.3)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.5.0)
     github-graphql (1.2.2)
       json (~> 2.1)
     http-cookie (1.0.3)
@@ -53,6 +54,7 @@ PLATFORMS
 
 DEPENDENCIES
   commit-time (~> 1.1)
+  dotenv (~> 2.5)
   github-graphql (~> 1.2)
   json (~> 2.1)
   rack-test (~> 1.1)
